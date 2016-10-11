@@ -1,4 +1,7 @@
 # proj3-anagrams
+Jacob Dickinson
+jdickins@uoregon.edu
+
 Vocabularly anagrams game for primary school English language learners (ELL)
 
 
