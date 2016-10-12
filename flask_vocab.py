@@ -97,6 +97,7 @@ def check():
     ## Cool, they found a new word
     matches.append(text)
     flask.session["matches"] = matches
+    #WORDS = WORDS.as_list().remove(text)
   elif text in matches:
     flask.flash("You already found {}".format(text))
   elif not matched:
@@ -108,10 +109,8 @@ def check():
     assert False  # Raises AssertionError
 
   ## Choose page:  Solved enough, or keep going? 
-  if len(matches) >= flask.session["target_count"]:
-    return flask.redirect(url_for("success"))
-  else:
-    return flask.redirect(url_for("keep_going"))
+  rslt = {"goal": len(matches) >= flask.session["target_count"]}
+  return jsonify(result = rslt)
 
 ###############
 # AJAX request handlers 
