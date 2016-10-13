@@ -85,6 +85,7 @@ def check():
 
   ## The data we need, from form and from cookie
   text = request.form["attempt"]
+  app.logger.debug("text" + text)
   jumble = flask.session["jumble"]
   matches = flask.session.get("matches", []) # Default to empty list
 
@@ -109,8 +110,10 @@ def check():
     assert False  # Raises AssertionError
 
   ## Choose page:  Solved enough, or keep going? 
-  rslt = {"goal": len(matches) >= flask.session["target_count"]}
-  return jsonify(result = rslt)
+  if len(matches) >= flask.session["target_count"]:
+    return flask.redirect(url_for("success"))
+  else:
+    return flask.redirect(url_for("keep_going"))
 
 ###############
 # AJAX request handlers 
@@ -145,18 +148,18 @@ def format_filt( something ):
 @app.errorhandler(404)
 def error_404(e):
   app.logger.warning("++ 404 error: {}".format(e))
-  return render_template('404.html'), 404
+  return flask.render_template('404.html'), 404
 
 @app.errorhandler(500)
 def error_500(e):
    app.logger.warning("++ 500 error: {}".format(e))
    assert app.debug == False #  I want to invoke the debugger
-   return render_template('500.html'), 500
+   return flask.render_template('500.html'), 500
 
 @app.errorhandler(403)
 def error_403(e):
   app.logger.warning("++ 403 error: {}".format(e))
-  return render_template('403.html'), 403
+  return flask.render_template('403.html'), 403
 
 
 

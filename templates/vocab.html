@@ -112,6 +112,18 @@
 
 <script>
 
+function check() 
+    {
+        $.ajax(
+            {
+                type: "POST",
+                url: "/_check",
+                dataType: "text",
+                data: "attempt",
+            })
+    }
+
+
 $("#entry").submit( function(event) {
    event.preventDefault();
   });
@@ -122,23 +134,9 @@ $("#attempt").keyup(function(event) {
    var keycode = event.which;      // They key that just went up
    var letter = String.fromCharCode(keycode);
 
-   // That letter might not be a letter ... it could be the
-   // the backspace key, or even the shift key, because 'keyup'
-   // catches all kinds of keys.  (Also, the difference between
-   // upper and lower case comes from state of shift key + key code,
-   // so ignoring the shift key we get only the upper case letters.
-
    if (! "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter)) { return }
 
-  $.getJSON( "/_check",  
-              function(data) {
-                rsval = data.result;
-                if(rsval){
-                   $("#response").html("/success");
-                } else {
-                   $("#response").html("/keep_going");
-                }
-               }); 
+   check();
 
 });
 
