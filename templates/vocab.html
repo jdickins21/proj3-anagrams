@@ -134,7 +134,7 @@ $("#attempt").keyup(function(event) {
               function(data) {
                 rsval = data.result.win;
                 if (rsval) {
-                  $("#message").append("WIN");
+                  window.open('success.html', '_blank');
                 }
               }
             );

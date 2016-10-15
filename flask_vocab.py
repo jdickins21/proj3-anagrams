@@ -109,7 +109,7 @@ def win():
 
   rslt= {"win": len(matches) >= flask.session["target_count"]}
 
-  app.logger.debug(int(len(matches)))
+  app.logger.debug("test len: " + str(len(matches)))
   app.logger.debug(rslt)
 
   return jsonify(result = rslt)
