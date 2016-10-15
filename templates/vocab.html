@@ -123,8 +123,9 @@ $("#attempt").keyup(function(event) {
               function(data) {
                 rsval = data.result.match;
                 if (rsval) {
-                  $("#message").append(txt + "\n\n");
+                  $("#message").append(txt + "\n");
                   $("#attempt").val("");
+                  session.matches.append(txt);
                 }
               }
             );

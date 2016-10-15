@@ -97,8 +97,8 @@ def check():
   rslt =  {"match": matched and in_jumble and not (text in matches)}
 
   if rslt.get("match"):
-    matches.push(text)
-    app.logger.debug("content " + matches[0])
+    matches.append(text)
+    matches.append(text)
     flask.session["matches"] = matches
 
   return jsonify(result = rslt)
@@ -113,9 +113,6 @@ def win():
   app.logger.debug(rslt)
 
   return jsonify(result = rslt)
-  
-  
-    
 
 ###############
 # AJAX request handlers 
