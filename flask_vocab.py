@@ -71,7 +71,7 @@ def success():
 #   a JSON request handler
 #######################
 
-@app.route("/_check", methods = ["POST"])
+@app.route("/_check")
 def check():
   """
   User has submitted the form with a word ('attempt')
@@ -82,10 +82,10 @@ def check():
   already found.
   """
   app.logger.debug("Entering check")
+  app.logger.debug("win count: " + str(flask.session["target_count"]))
 
   ## The data we need, from form and from cookie
-  text = request.form["attempt"]
-  app.logger.debug("text" + text)
+  text = request.args.get("attempt", type=str)
   jumble = flask.session["jumble"]
   matches = flask.session.get("matches", []) # Default to empty list
 
@@ -94,26 +94,28 @@ def check():
   matched = WORDS.has(text)
 
   ## Respond appropriately 
-  if matched and in_jumble and not (text in matches):
-    ## Cool, they found a new word
-    matches.append(text)
-    flask.session["matches"] = matches
-    #WORDS = WORDS.as_list().remove(text)
-  elif text in matches:
-    flask.flash("You already found {}".format(text))
-  elif not matched:
-    flask.flash("{} isn't in the list of words".format(text))
-  elif not in_jumble:
-    flask.flash('"{}" can\'t be made from the letters {}'.format(text,jumble))
-  else:
-    app.logger.debug("This case shouldn't happen!")
-    assert False  # Raises AssertionError
+  rslt =  {"match": matched and in_jumble and not (text in matches)}
 
-  ## Choose page:  Solved enough, or keep going? 
-  if len(matches) >= flask.session["target_count"]:
-    return flask.redirect(url_for("success"))
-  else:
-    return flask.redirect(url_for("keep_going"))
+  if rslt.get("match"):
+    matches.push(text)
+    app.logger.debug("content " + matches[0])
+    flask.session["matches"] = matches
+
+  return jsonify(result = rslt)
+
+@app.route("/_win")
+def win():
+  matches = flask.session.get("matches", [])
+
+  rslt= {"win": len(matches) >= flask.session["target_count"]}
+
+  app.logger.debug(int(len(matches)))
+  app.logger.debug(rslt)
+
+  return jsonify(result = rslt)
+  
+  
+    
 
 ###############
 # AJAX request handlers 

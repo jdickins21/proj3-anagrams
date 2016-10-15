@@ -100,29 +100,12 @@
 {% endif %}
 
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <!-- Mismatch, already found, etc. "flashed" from Python -->
-    {% for message in messages %}
-      <p class="message">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+
+<p id="message"></p>
+
  </div> <!-- container -->
 
 <script>
-
-function check() 
-    {
-        $.ajax(
-            {
-                type: "POST",
-                url: "/_check",
-                dataType: "text",
-                data: "attempt",
-            })
-    }
-
 
 $("#entry").submit( function(event) {
    event.preventDefault();
@@ -136,7 +119,24 @@ $("#attempt").keyup(function(event) {
 
    if (! "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter)) { return }
 
-   check();
+   $.getJSON( "/_check", { attempt: txt }, 
+              function(data) {
+                rsval = data.result.match;
+                if (rsval) {
+                  $("#message").append(txt + "\n\n");
+                  $("#attempt").val("");
+                }
+              }
+            );
+
+    $.getJSON( "/_win", 
+              function(data) {
+                rsval = data.result.win;
+                if (rsval) {
+                  $("#message").append("WIN");
+                }
+              }
+            );
 
 });
 
