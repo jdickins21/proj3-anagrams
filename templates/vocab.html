@@ -117,21 +117,21 @@ $("#attempt").keyup(function(event) {
    var keycode = event.which;      // They key that just went up
    var letter = String.fromCharCode(keycode);
 
-   if (! "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter)) { return }
+  if (! "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter)) { return }
 
-   $.getJSON( "/_check", { attempt: txt }, 
+    $.getJSON( "/_check", { attempt: txt }, 
               function(data) {
                 rsval = data.result.match;
                 if (rsval) {
                   $("#message").append(txt + "\n");
                   $("#attempt").val("");
-                  session.matches.append(txt);
+                  
                 }
               }
             );
 
     $.getJSON( "/_win", 
-              function(data) {
+              function(data){
                 rsval = data.result.win;
                 if (rsval) {
                   window.open('success.html', '_blank');

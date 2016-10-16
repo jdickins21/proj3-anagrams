@@ -96,11 +96,6 @@ def check():
   ## Respond appropriately 
   rslt =  {"match": matched and in_jumble and not (text in matches)}
 
-  if rslt.get("match"):
-    matches.append(text)
-    matches.append(text)
-    flask.session["matches"] = matches
-
   return jsonify(result = rslt)
 
 @app.route("/_win")
